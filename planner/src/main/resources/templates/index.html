@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메인 페이지</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 600px;
+            margin-top: 100px;
+        }
+        .btn-custom {
+            width: 100%;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">스마트 플래너 서비스</a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" th:href="@{/login}">로그인</a>
+            <a class="nav-link" th:href="@{/registry}">회원가입</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container text-center">
+    <h2 class="mb-4">플래너 서비스에 오신 것을 환영합니다!</h2>
+    <p class="text-muted">손쉽게 일정을 관리하고 다양한 기능을 활용해 보세요.</p>
+
+    <a class="btn btn-primary btn-custom" th:href="@{/login}">로그인</a>
+    <a class="btn btn-outline-dark btn-custom" th:href="@{/registry}">회원가입</a>
+</div>
+
+<footer class="text-center mt-5 py-3 bg-light">
+    <p class="mb-0">&copy; 2025 플래너 서비스. 모든 권리 보유.</p>
+</footer>
+
+</body>
+</html>

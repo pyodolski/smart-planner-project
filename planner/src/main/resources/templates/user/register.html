@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        .container {
+            max-width: 500px;
+            margin-top: 50px;
+        }
+        .fieldError {
+            color: #bd2130;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2 class="text-center">회원가입</h2>
+    <form th:action="@{/registry}" role="form" method="post" th:object="${userDTO}">
+        <div class="form-group py-2">
+            <label for="email">이메일</label>
+            <input type="text" id="email" th:field="*{email}" class="form-control" placeholder="이메일 입력" required>
+            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="fieldError">잘못된 이메일 형식입니다.</p>
+        </div>
+
+        <div class="form-group py-2">
+            <label for="password">비밀번호</label>
+            <input type="password" id="password" th:field="*{password}" class="form-control" placeholder="비밀번호 입력" required>
+            <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="fieldError">비밀번호를 입력하세요.</p>
+        </div>
+
+        <div class="form-group py-2">
+            <label for="password_confirm">비밀번호 확인</label>
+            <input type="password" id="password_confirm" th:field="*{password_confirm}" class="form-control" placeholder="비밀번호 재입력" required>
+            <p th:if="${#fields.hasErrors('password_confirm')}" th:errors="*{password_confirm}" class="fieldError">비밀번호가 일치하지 않습니다.</p>
+        </div>
+
+        <div class="form-group py-2">
+            <label for="name">이름</label>
+            <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="이름 입력" required>
+            <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">이름을 입력하세요.</p>
+        </div>
+
+        <div class="form-group py-2">
+            <label for="phone">휴대폰 번호</label>
+            <input type="text" id="phone" th:field="*{phone}" class="form-control" placeholder="휴대폰번호 입력('-' 포함)" required>
+            <p th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="fieldError">올바른 휴대폰 번호를 입력하세요.</p>
+        </div>
+
+        <!-- 회원가입 버튼 -->
+        <div class="text-center py-3">
+            <button type="submit" class="btn btn-dark w-100">회원가입</button>
+        </div>
+
+        <!-- 취소 버튼 -->
+        <div class="text-center">
+            <button type="button" class="btn btn-outline-dark w-100" onclick="history.back();">취소</button>
+        </div>
+    </form>
+</div>
+
+<!-- 회원가입 실패 시 에러 메시지 출력 -->
+<script th:inline="javascript">
+    document.addEventListener("DOMContentLoaded", function() {
+        var errorMessage = [[${errorMessage}]];
+        if(errorMessage) {
+            alert(errorMessage);
+        }
+    });
+</script>
+
+</body>
+</html>
