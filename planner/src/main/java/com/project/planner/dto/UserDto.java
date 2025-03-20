@@ -1,18 +1,19 @@
 package com.project.planner.dto;
 
+import com.project.planner.domain.Role;
 import com.project.planner.domain.User;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
-import java.lang.reflect.Member;
-
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 @NoArgsConstructor
 @Data
-public class UserDTO {
+public class UserDto {
     // @NotBlank : null, "", " " 허용 X
     @NotBlank(message = "이메일을 입력하세요.")
     @Email
@@ -22,8 +23,8 @@ public class UserDTO {
     @Length(min = 6, max = 16, message = "비밀번호는 6자 이상 16자 이하로 입력하세요.")
     private String password;
 
-    @NotBlank(message = "비밀번호를 한번 더 입력하세요.")
-    @Length(min = 6, max = 16, message = "비밀번호는 6자 이상 16자 이하로 입력하세요.")
+    @NotBlank(message = "비밀번호 확인은 필수 입력 값입니다.")
+    @Length(min = 6, max = 16, message = "비밀번호는 6자 이상, 16자 이하로 입력해주세요.")
     private String password_confirm;
 
     @NotBlank(message = "이름을 입력하세요.")
@@ -40,6 +41,7 @@ public class UserDTO {
                 .password(password)
                 .name(name)
                 .phone(phone)
+                .role(Role.USER)
                 .build();
     }
 
