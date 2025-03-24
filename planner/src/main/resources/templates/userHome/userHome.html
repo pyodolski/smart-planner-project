@@ -2,22 +2,66 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>오늘의 전국 일기 예보</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-
-<!-- 메인 컨테이너 -->
-<div>
-  <h1>유저 홈</h1>
-
-  <!-- 오늘의 전국 일기 예보 -->
-  <div class="card">
-    <h2>오늘의 전국 일기 예보</h2>
-    <p>여기에 날씨 정보를 표시하세요.</p>
-  </div>
-
+<h1>오늘의 전국 일기 예보</h1>
+<div id="weather">
+  <p>로딩 중입니다...</p>
 </div>
 
+<script>
+  // 오늘 날짜 계산
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = ('0' + (today.getMonth() + 1)).slice(-2);
+  const day = ('0' + today.getDate()).slice(-2);
+  const stnId = "108"; // 전국 기준
+
+  // 예보 시각 결정 (06시/18시 기준)
+  const now = new Date();
+  const hour = now.getHours();
+  let tmFc;
+
+  if (hour < 6) {
+    // 6시 이전이면 전날 18시 기준 예보
+    const yester = new Date(now);
+    yester.setDate(now.getDate() - 1);
+    const yYear = yester.getFullYear();
+    const yMonth = ('0' + (yester.getMonth() + 1)).slice(-2);
+    const yDay = ('0' + yester.getDate()).slice(-2);
+    tmFc = `${yYear}${yMonth}${yDay}1800`;
+  } else if (hour < 18) {
+    tmFc = `${year}${month}${day}0600`;
+  } else {
+    tmFc = `${year}${month}${day}1800`;
+  }
+
+  // 날씨 API 호출
+  const url = `/user/getWeatherApi/${stnId}/${tmFc}`;
+  $.ajax({
+    url: url,
+    type: "GET",
+    success: function (response) {
+      const data = JSON.parse(response);
+      const items = data.response.body.items.item;
+
+      let html = "";
+      for (let i = 0; i < items.length; i++) {
+        html += `<p>${items[i].wfSv}</p>`;
+      }
+
+      if (html === "") {
+        html = "<p>날씨 정보를 불러올 수 없습니다.</p>";
+      }
+
+      $("#weather").html(html);
+    },
+    error: function () {
+      $("#weather").html("<p>날씨 정보를 불러오는 데 실패했습니다.</p>");
+    }
+  });
+</script>
 </body>
 </html>

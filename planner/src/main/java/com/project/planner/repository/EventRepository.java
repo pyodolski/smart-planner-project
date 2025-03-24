@@ -11,7 +11,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     // User, EventType 으로 조회
     List<Event> findAllByUserAndEventTypeAndStartDate(User user, String eventType, String date);
     // User, EventType, StartDate 으로 조회
-    List<Event> findAllByUserAndEventTypeAndMonth(User user, String eventType, String month);
+    List<Event> findAllByUserAndEventTypeAndStartMonth(User user, String eventType, String month);
     // User, EventType, Month 으로 조회
 
     // List<Event> findAllByUser(User user);

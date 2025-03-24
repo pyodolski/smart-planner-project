@@ -99,7 +99,7 @@ public class EventService {
     }
 
     public List<EventDto> findMonthShopping(User user, String month) {
-        List<Event> list = eventRepository.findAllByUserAndEventTypeAndMonth(user, "shopping", month);
+        List<Event> list = eventRepository.findAllByUserAndEventTypeAndStartMonth(user, "shopping", month);
 
         List<EventDto> shoppingDto = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
