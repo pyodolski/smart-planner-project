@@ -1,5 +1,7 @@
 package com.project.planner.controller;
 
+import com.project.planner.domain.User;
+import com.project.planner.dto.EventDto;
 import com.project.planner.repository.UserRepository;
 import com.project.planner.service.EventService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.Principal;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -55,6 +59,32 @@ public class UserController {
         conn.disconnect();
 
         return sb.toString();
+    }
+    @GetMapping("/user/getYesterdayDiet/{yesterdayDate}")
+    @ResponseBody
+    public List<EventDto> getYesterdayDiet(@PathVariable String yesterdayDate, Principal principal) throws IOException {
+        // Principal principal은 현재 로그인한 사용자 정보를 가져올 수 있게 해주는 Spring Security의 기능
+        String userName = principal.getName();
+        User user = userRepository.findByEmail(userName);
+        return eventService.findYesterdayDiets(user, yesterdayDate);
+        // 현재 로그인한 유저의 정보 접근 가능 어제 식단 호출
+    }
 
+    @GetMapping("user/getShoppingByDate/{date}")
+    @ResponseBody
+    public List<EventDto> getShoppingByDate(@PathVariable String date, Principal principal) throws IOException {
+        String username = principal.getName();
+        User user = userRepository.findByEmail(username);
+
+        return eventService.findDayShopping(user, date);
+    }
+
+    @GetMapping("user/getShoppingByMonth/{month}")
+    @ResponseBody
+    public List<EventDto> getShoppingByMonth(@PathVariable String month, Principal principal) throws IOException {
+        String username = principal.getName();
+        User user = userRepository.findByEmail(username);
+
+        return eventService.findMonthShopping(user, month);
     }
 }
