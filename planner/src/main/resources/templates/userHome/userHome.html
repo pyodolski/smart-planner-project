@@ -27,13 +27,14 @@
             font-size: 1.3em;
         }
 
-        .navbar a {
+        .nav-links a {
             color: white;
             text-decoration: none;
             font-weight: bold;
+            margin-left: 20px;
         }
 
-        .navbar a:hover {
+        .nav-links a:hover {
             text-decoration: underline;
         }
 
@@ -76,7 +77,11 @@
 
 <div class="navbar">
     <h2>날씨 대시보드</h2>
-    <a href="/logout" onclick="return confirm('로그아웃 하시겠습니까?')">로그아웃</a>
+    <div class="nav-links">
+        <a href="/user/home">유저 홈</a>
+        <a href="/myPlanner">나의 플래너</a>
+        <a href="/logout" onclick="return confirm('로그아웃 하시겠습니까?')">로그아웃</a>
+    </div>
 </div>
 
 <h1>오늘의 전국 일기 예보</h1>

@@ -7,13 +7,57 @@
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.js"></script>
     <style>
+        body {
+            margin: 0;
+            font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background-color: #2c3e50;
+            color: white;
+        }
+
+        .navbar h2 {
+            margin: 0;
+            font-size: 1.3em;
+        }
+
+        .navbar .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            margin-left: 20px;
+        }
+
+        .navbar .nav-links a:hover {
+            text-decoration: underline;
+        }
+
         #calendar {
             max-width: 900px;
             margin: 40px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
         }
     </style>
 </head>
 <body>
+
+<div class="navbar">
+    <h2>일정 플래너</h2>
+    <div class="nav-links">
+        <a href="/user/home">유저 홈</a>
+        <a href="/myPlanner">나의 플래너</a>
+        <a href="/logout" onclick="return confirm('로그아웃 하시겠습니까?')">로그아웃</a>
+    </div>
+</div>
 
 <div id="calendar"></div>
 
@@ -29,7 +73,7 @@
                 center: 'title',
                 right: 'dayGridMonth,dayGridWeek,dayGridDay'
             },
-            selectable: true,  // 선택 가능하게
+            selectable: true,
             select: function(info) {
                 const title = prompt('일정 제목을 입력하세요:');
                 if (title) {
@@ -40,7 +84,7 @@
                         allDay: info.allDay
                     });
                 }
-                calendar.unselect(); // 선택 해제
+                calendar.unselect();
             },
         });
 
