@@ -264,7 +264,7 @@ public class MyPlannerController {
     public String getDietApi(@PathVariable Long numOfRows, @PathVariable Long pageNo) throws IOException {
 
         String base = "http://apis.data.go.kr/";
-        String service = "1471000/FoodNtrCpntDbInfo01";
+        String service = "1471000/FoodNtrCpntDbInfo02";
         String serviceKey = "CH%2FJx5uRVc0rOLBa5MkIkCdgg2vCmy0p96GHAjiVL0MAM%2B3x%2BAfgLKiAhO8lyx1acH7FRpJtaGdw9NErQZnD2g%3D%3D";
         String type = "json";
         String string_url = base + service + "?" + "ServiceKey=" + serviceKey + "&" + "numOfRows=" + numOfRows + "&" + "pageNo=" + pageNo + "&" + "type=" + type;
@@ -296,7 +296,7 @@ public class MyPlannerController {
     public String getDietApiByName(@PathVariable Long numOfRows, @PathVariable Long pageNo, @PathVariable String desc_kor) throws IOException {
 
         String base = "http://apis.data.go.kr/";
-        String service = "1471000/FoodNtrCpntDbInfo01";
+        String service = "1471000/FoodNtrCpntDbInfo02";
         String serviceKey = "CH%2FJx5uRVc0rOLBa5MkIkCdgg2vCmy0p96GHAjiVL0MAM%2B3x%2BAfgLKiAhO8lyx1acH7FRpJtaGdw9NErQZnD2g%3D%3D";
         String type = "json";
         String searchParam = URLEncoder.encode(desc_kor, "UTF-8");
@@ -328,6 +328,7 @@ public class MyPlannerController {
     // 조회 방식의 차이
     // 1. 페이지 단위로 조회하는 기본 API 호출 방식
     // 2. 식품 이름으로 영양 정보를 검색하는 기능
+
 }
 
 
