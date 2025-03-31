@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common :: head(title)" />
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/google-calendar@6.1.8/index.global.min.js"></script><link href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <style>
+        .cc-selector input{
+            margin:0;padding:0;
+            -webkit-appearance:none;
+            -moz-appearance:none;
+            appearance:none;
+
+            cursor:pointer;
+            background-size:contain;
+            background-repeat:no-repeat;
+            display:inline-block;
+            width:100px;height:70px;
+            -webkit-transition: all 100ms ease-in;
+            -moz-transition: all 100ms ease-in;
+            transition: all 100ms ease-in;
+            -webkit-filter: brightness(0) grayscale(1) opacity(1);
+            -moz-filter: brightness(0) grayscale(1) opacity(1);
+            filter: brightness(0) grayscale(1) opacity(1);
+        }
+        #vacation{background-image:url(/img/eventType/vacation.png);}
+        #diet{background-image:url(/img/eventType/diet.png);}
+        #shopping{background-image:url(/img/eventType/shopping.png);}
+        #place{background-image:url(/img/eventType/place.png);}
+        #text{background-image:url(/img/eventType/text.png);}
+
+
+        .cc-selector input:hover{
+            -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
+            -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
+            filter: brightness(1.2) grayscale(.5) opacity(.9);
+        }
+
+        .cc-selector input:checked {
+            -webkit-filter: none;
+            -moz-filter: none;
+            filter: none;
+        }
+
+        #diet_pagingul, #px_pagingul{
+            text-align: center;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-right: 0;
+            padding-left :0;
+        }
+
+        #diet_pagingul li, #px_pagingul li {
+            text-align: center;
+            float: left;
+            list-style:none;
+
+        }
+
+        #diet_pagingul li a, #px_pagingul li a {
+            display: block;
+            font-size: 14px;
+            color: black;
+            padding: 9px 12px;
+            border-right: solid 1px #ccc;
+            box-sizing: border-box;
+            text-decoration-line:none;
+        }
+
+        #diet_pagingul li.on, #px_pagingul li.on {
+            background: #eda712;
+        }
+
+        #diet_pagingul li.on a, #px_pagingul li.on a {
+            color: #fff;
+        }
+    </style>
+    <link href="/css/planner_css.css" rel="stylesheet" />
+</head>

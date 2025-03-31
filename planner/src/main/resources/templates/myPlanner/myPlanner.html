@@ -6,6 +6,7 @@
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
             margin: 0;
@@ -46,6 +47,52 @@
             border-radius: 10px;
             box-shadow: 0 8px 16px rgba(0,0,0,0.1);
         }
+
+        /* 모달 스타일 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 300px;
+            text-align: center;
+        }
+
+        .modal-content label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        .modal-content button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .cc-selector {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cc-selector div {
+            margin-bottom: 10px;
+        }
+
+        .form-check-input {
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
@@ -61,11 +108,43 @@
 
 <div id="calendar"></div>
 
+<!-- 일정 추가 모달 -->
+<div class="modal" id="add_event_modal">
+    <div class="modal-content">
+        <h5>일정을 입력하세요</h5>
+        <form id="eventText" class="form-group">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" id="all_time" name="all_or_set_time" onchange="setTimeDisplay()" checked="checked">
+                <label class="form-check-label all_time" for="all_time">종일</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" id="set_time" name="all_or_set_time" onchange="setTimeDisplay()">
+                <label class="form-check-label set_time" for="set_time">시간 지정</label>
+            </div>
+            <label for="add_event_start_date" class="col-form-label">시작 날짜</label>
+            <input type="date" class="form-control" id="add_event_start_date" name="calendar_start_date">
+            <label for="add_event_start_time" class="col-form-label">시작 시간</label>
+            <input type="time" class="form-control" id="add_event_start_time" name="calendar_start_time" disabled="true" value="00:00">
+            <label for="add_event_end_date" class="col-form-label">종료 날짜</label>
+            <input type="date" class="form-control" id="add_event_end_date" name="calendar_end_date">
+            <label for="add_event_end_time" class="col-form-label">종료 시간</label>
+            <input type="time" class="form-control" id="add_event_end_time" name="calendar_end_time" disabled="true" value="00:00">
+        </form>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="add_event_save">추가</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="add_event_modal_close">취소</button>
+        </div>
+    </div>
+</div>
+
 <script>
+    let calendar;
+    let selectedInfo;
+
     document.addEventListener('DOMContentLoaded', function () {
         const calendarEl = document.getElementById('calendar');
 
-        const calendar = new FullCalendar.Calendar(calendarEl, {
+        calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             locale: 'ko',
             headerToolbar: {
@@ -75,20 +154,54 @@
             },
             selectable: true,
             select: function(info) {
-                const title = prompt('일정 제목을 입력하세요:');
-                if (title) {
-                    calendar.addEvent({
-                        title: title,
-                        start: info.start,
-                        end: info.end,
-                        allDay: info.allDay
-                    });
-                }
-                calendar.unselect();
+                selectedInfo = info;
+                $('#add_event_modal').show();
             },
         });
 
         calendar.render();
+
+        // 일정 추가 시 해당 이벤트 유형에 맞는 입력 필드 표시
+        $('input[name="all_or_set_time"]').on('change', function() {
+            setTimeDisplay();
+        });
+
+        function setTimeDisplay() {
+            const isAllDay = $('#all_time').prop('checked');
+            $('#add_event_start_time').prop('disabled', isAllDay);
+            $('#add_event_end_time').prop('disabled', isAllDay);
+        }
+
+        // 저장 버튼 클릭 시 이벤트 추가
+        $('#add_event_save').on('click', function () {
+            const title = $('#add_event_text').val();  // 제목을 사용
+            const startDate = $('#add_event_start_date').val();
+            const endDate = $('#add_event_end_date').val();
+            const startTime = $('#add_event_start_time').val();
+            const endTime = $('#add_event_end_time').val();
+            const start = `${startDate}T${startTime}`;
+            const end = `${endDate}T${endTime}`;
+
+            if (!title || !startDate || !endDate) {
+                alert('모든 필드를 입력해주세요.');
+                return;
+            }
+
+            calendar.addEvent({
+                title: title,
+                start: start,
+                end: end,
+                allDay: false
+            });
+
+            $('#add_event_modal').hide();
+            calendar.unselect();
+        });
+
+        // 취소 버튼 클릭 시 모달 닫기
+        $('#add_event_modal_close').on('click', function () {
+            $('#add_event_modal').hide();
+        });
     });
 </script>
 
