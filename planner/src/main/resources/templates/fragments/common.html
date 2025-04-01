@@ -1,82 +1,206 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/common :: head(title)" />
-<head>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/google-calendar@6.1.8/index.global.min.js"></script><link href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" rel="stylesheet" />
-    <meta name="_csrf" th:content="${_csrf.token}"/>
-    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" >
+<head th:fragment="head(title)">
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!--jquery-->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <title>ArmyPlanner</title>
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!--Bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
+    <!--fontawesone-->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <style>
-        .cc-selector input{
-            margin:0;padding:0;
-            -webkit-appearance:none;
-            -moz-appearance:none;
-            appearance:none;
-
-            cursor:pointer;
-            background-size:contain;
-            background-repeat:no-repeat;
-            display:inline-block;
-            width:100px;height:70px;
-            -webkit-transition: all 100ms ease-in;
-            -moz-transition: all 100ms ease-in;
-            transition: all 100ms ease-in;
-            -webkit-filter: brightness(0) grayscale(1) opacity(1);
-            -moz-filter: brightness(0) grayscale(1) opacity(1);
-            filter: brightness(0) grayscale(1) opacity(1);
-        }
-        #vacation{background-image:url(/img/eventType/vacation.png);}
-        #diet{background-image:url(/img/eventType/diet.png);}
-        #shopping{background-image:url(/img/eventType/shopping.png);}
-        #place{background-image:url(/img/eventType/place.png);}
-        #text{background-image:url(/img/eventType/text.png);}
-
-
-        .cc-selector input:hover{
-            -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
-            -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
-            filter: brightness(1.2) grayscale(.5) opacity(.9);
+        @font-face {
+            font-family: 'KCC-eunyoung';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/KCC-eunyoung-Regular.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
         }
 
-        .cc-selector input:checked {
-            -webkit-filter: none;
-            -moz-filter: none;
-            filter: none;
+        <!--        @font-face {-->
+        <!--        font-family: 'UhBeemysen';-->
+        <!--        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_five@.2.0/UhBeemysen.woff') format('woff');-->
+        <!--        font-weight: normal;-->
+        <!--        font-style: normal;-->
+        <!--        }-->
+
+        @font-face {
+            font-family: 'KOTRA_SONGEULSSI';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10-21@1.0/KOTRA_SONGEULSSI.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
         }
 
-        #diet_pagingul, #px_pagingul{
-            text-align: center;
-            display: inline-block;
-            border: 1px solid #ccc;
-            border-right: 0;
-            padding-left :0;
+        <!--        @font-face {-->
+        <!--            font-family: 'Handletter';-->
+        <!--            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/naverfont_05@1.0/Handletter.woff') format('woff');-->
+        <!--            font-weight: normal;-->
+        <!--            font-style: normal;-->
+        <!--        }-->
+
+        <!--        @font-face {-->
+        <!--            font-family: 'Yak';-->
+        <!--            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2205-2@1.0/Yak.woff2') format('woff2');-->
+        <!--            font-weight: normal;-->
+        <!--            font-style: normal;-->
+        <!--        }-->
+
+        @font-face {
+            font-family: 'Pretendard-Regular';
+            src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
         }
 
-        #diet_pagingul li, #px_pagingul li {
-            text-align: center;
-            float: left;
-            list-style:none;
-
+        @font-face {
+            font-family: 'Pretendard-Regular_bold';
+            src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+            font-weight: 800;
+            font-style: bold;
         }
 
-        #diet_pagingul li a, #px_pagingul li a {
-            display: block;
-            font-size: 14px;
-            color: black;
-            padding: 9px 12px;
-            border-right: solid 1px #ccc;
-            box-sizing: border-box;
-            text-decoration-line:none;
+
+        body,
+        html {
+            height: 100%;
+            font-family: 'Pretendard-Regular';
         }
 
-        #diet_pagingul li.on, #px_pagingul li.on {
-            background: #eda712;
+
+        .feature {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 3rem;
+            width: 3rem;
+            font-size: 1.5rem;
         }
 
-        #diet_pagingul li.on a, #px_pagingul li.on a {
-            color: #fff;
+        .bg-featured-blog {
+            height: 100%;
+            width: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 15rem;
         }
+
+        .banner {
+            width:12vh;
+        }
+
+        img { -webkit-perspective: 1; }
+
+        body {
+            -webkit-user-select:none;
+            -moz-user-select:none;
+            -ms-user-select:none;
+            user-select:none
+        }
+
     </style>
-    <link href="/css/planner_css.css" rel="stylesheet" />
 </head>
+
+<body>
+<!-- Navigation-->
+<nav th:fragment="menu(menu)" class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+    <div class="container px-5">
+        <a class="navbar-brand" href="/" sec:authorize="!isAuthenticated()"><img src="/img/logo/armyPlannerLogo_white.png" class="banner"></img></a>
+        <a class="navbar-brand" th:href="@{/user/home}" sec:authorize="isAuthenticated()"><img src="/img/logo/armyPlannerLogo_white.png" class="banner"></img></a>
+        <div class="collapse navbar-collapse" id="navbarStatus" sec:authorize="isAuthenticated()">
+            <!--            <ul>-->
+            <!--                <li class="text-light" th:text="|${#authentication.name}님 환영합니다.|"></li>-->
+            <!--                <li class="text-light" th:text="|현재 ${#authentication.name} 님의 권한 : ${#authentication.authorities}}|"></li>-->
+            <!--            </ul>-->
+
+            <!--            <ul>-->
+            <!--                <li class="text-light" th:text="|session.getId = ${#session.getId()}|"></li>-->
+            <!--                <li class="text-light" th:text="|session.getAttributeNames = ${#session.getAttributeNames()}|"></li>-->
+            <!--                <li class="text-light" th:text="|session.getCreationTime = ${#session.getCreationTime()}|"></li>-->
+            <!--            </ul>-->
+        </div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="/">소개</a></li>
+                <li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link" th:href="@{/user/home}">유저홈</a></li>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')"><a class="nav-link" th:href="@{/admin/home}">ADMIN page</a></li>
+                <li class="nav-item" sec:authorize="hasRole('MANAGER')"><a class="nav-link" th:href="@{/manager/home}">MANAGER page</a></li>
+                <li class="nav-item" sec:authorize="!isAuthenticated()"><a class="nav-link" th:href="@{/registry}">회원가입</a></li>
+                <li class="nav-item" sec:authorize="!isAuthenticated()"><a class="nav-link" th:href="@{/login}">로그인</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/myPlanner}">나의 Planner</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/map/searchView}">군혜택MAP</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdownPortfolio" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">기타 군혜택</a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
+                        <li><a class="dropdown-item" th:href="@{/mou/armyMou}">국방부 MOU 혜택 정보</a></li>
+                        <!--                        <li><a class="dropdown-item" href="portfolio-item.html">커뮤니티</a></li>-->
+                    </ul>
+                </li>
+                <!-- Navbar-->
+                <ul class="navbar-nav ms-md-0 me-3 me-lg-4" sec:authorize="isAuthenticated()">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <!--                            <li><a class="dropdown-item" href="#!">회원정보</a></li>-->
+                            <li style="min-width: max-content;" class="p-1">
+                                <p th:text="|${#authentication.name}님 환영합니다.|" style="margin:0"></p>
+                                <!--                                <p th:text="|현재 ${#authentication.name} 님의 권한 : ${#authentication.authorities}|" style="margin:0"></p>-->
+                            </li>
+                            <li><hr class="dropdown-divider" /></li>
+                            <li><a class="dropdown-item" th:href="@{/logout}">로그아웃</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<footer th:fragment="footer">
+    <div id="carouselAdIndicators" class="carousel slide container px-5 my-5" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselAdIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselAdIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="/img/ad/국방부MOU광고탑재예정.png" class="d-block w-100" alt="국방부MOU광고탑재예정.png">
+            </div>
+            <div class="carousel-item">
+                <img src="/img/ad/일반업체광고주모집중.png" class="d-block w-100" alt="일반업체광고주모집중.png">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselAdIndicators" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselAdIndicators" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    <div class="bg-dark py-4 mt-auto">
+        <div class="container px-5">
+            <div class="row align-items-center justify-content-between flex-column flex-sm-row">
+                <div class="col-auto"><div class="small m-0 text-white">Copyright &copy;ArmyPlanner 2023</div></div>
+                <div class="col-auto">
+                    <a class="link-light small" href="#!">Privacy</a>
+                    <span class="text-white mx-1">&middot;</span>
+                    <a class="link-light small" href="#!">Terms</a>
+                    <span class="text-white mx-1">&middot;</span>
+                    <a class="link-light small" href="#!">Contact</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</footer>
+</body>
+
+</html>
