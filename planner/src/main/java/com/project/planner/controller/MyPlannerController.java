@@ -267,19 +267,28 @@ public class MyPlannerController {
         String service = "1471000/FoodNtrCpntDbInfo02";
         String serviceKey = "CH%2FJx5uRVc0rOLBa5MkIkCdgg2vCmy0p96GHAjiVL0MAM%2B3x%2BAfgLKiAhO8lyx1acH7FRpJtaGdw9NErQZnD2g%3D%3D";
         String type = "json";
-        String string_url = base + service + "?" + "ServiceKey=" + serviceKey + "&" + "numOfRows=" + numOfRows + "&" + "pageNo=" + pageNo + "&" + "type=" + type;
 
+        // URL을 형식에 맞게 구성
+        String string_url = base + service + "/getFoodNtrCpntDbInq02?" + "ServiceKey=" + serviceKey + "&" +
+                "pageNo=" + pageNo + "&" +
+                "numOfRows=" + numOfRows + "&" +
+                "type=" + type;
+
+        // URL 객체 생성
         URL url = new URL(string_url);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-        BufferedReader rd;
+        // HTTP 요청 방식 설정 (GET)
+        conn.setRequestMethod("GET");
 
-        // 서비스코드가 정상이면 200~300사이의 숫자가 나옵니다.
-        if(conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
+        // 응답 처리
+        BufferedReader rd;
+        if (conn.getResponseCode() >= 200 && conn.getResponseCode() <= 300) {
             rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
         } else {
             rd = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
         }
+
         StringBuilder sb = new StringBuilder();
         String line;
         while ((line = rd.readLine()) != null) {
@@ -288,9 +297,10 @@ public class MyPlannerController {
         rd.close();
         conn.disconnect();
 
+        // 응답을 반환
         return sb.toString();
-
     }
+
     @GetMapping("getDietApi/{numOfRows}/{pageNo}/{desc_kor}")
     @ResponseBody
     public String getDietApiByName(@PathVariable Long numOfRows, @PathVariable Long pageNo, @PathVariable String desc_kor) throws IOException {
@@ -300,7 +310,12 @@ public class MyPlannerController {
         String serviceKey = "CH%2FJx5uRVc0rOLBa5MkIkCdgg2vCmy0p96GHAjiVL0MAM%2B3x%2BAfgLKiAhO8lyx1acH7FRpJtaGdw9NErQZnD2g%3D%3D";
         String type = "json";
         String searchParam = URLEncoder.encode(desc_kor, "UTF-8");
-        String string_url = base + service + "?" + "ServiceKey=" + serviceKey + "&" + "numOfRows=" + numOfRows + "&" + "pageNo=" + pageNo + "&" + "type=" + type + "&" + "desc_kor=" + searchParam;
+        String string_url = base + service + "/getFoodNtrCpntDbInq02?" + "ServiceKey=" + serviceKey + "&" +
+                "pageNo=" + pageNo + "&" +
+                "numOfRows=" + numOfRows + "&" +
+                "type=" + type + "&" +
+                "FOOD_NM_KR=" + URLEncoder.encode(desc_kor, "UTF-8");
+
 
         URL url = new URL(string_url);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
