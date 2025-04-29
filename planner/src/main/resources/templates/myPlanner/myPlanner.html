@@ -5,82 +5,105 @@
     <meta charset="UTF-8">
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/google-calendar@6.1.8/index.global.min.js"></script><link href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/google-calendar@6.1.8/index.global.min.js"></script>
+    <link href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" rel="stylesheet" />
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <style>
-        .cc-selector input{
-            margin:0;padding:0;
-            -webkit-appearance:none;
-            -moz-appearance:none;
-            appearance:none;
-
-            cursor:pointer;
-            background-size:contain;
-            background-repeat:no-repeat;
-            display:inline-block;
-            width:100px;height:70px;
-            -webkit-transition: all 100ms ease-in;
-            -moz-transition: all 100ms ease-in;
-            transition: all 100ms ease-in;
-            -webkit-filter: brightness(0) grayscale(1) opacity(1);
-            -moz-filter: brightness(0) grayscale(1) opacity(1);
-            filter: brightness(0) grayscale(1) opacity(1);
+        /* 선택 버튼 스타일 */
+        .cc-selector {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            margin-bottom: 32px;
         }
-        #vacation{background-image:url(/img/eventType/vacation.png);}
-        #diet{background-image:url(/img/eventType/diet.png);}
-        #shopping{background-image:url(/img/eventType/shopping.png);}
-        #place{background-image:url(/img/eventType/place.png);}
-        #text{background-image:url(/img/eventType/text.png);}
-
-
-        .cc-selector input:hover{
-            -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
-            -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
-            filter: brightness(1.2) grayscale(.5) opacity(.9);
-        }
-
-        .cc-selector input:checked {
-            -webkit-filter: none;
-            -moz-filter: none;
-            filter: none;
-        }
-
-        #diet_pagingul, #px_pagingul{
+        .cc-selector > div {
             text-align: center;
+        }
+        .cc-selector input[type="radio"] {
+            margin: 0;
+            padding: 0;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            cursor: pointer;
+            background-size: cover;
+            background-repeat: no-repeat;
             display: inline-block;
-            border: 1px solid #ccc;
-            border-right: 0;
-            padding-left :0;
+            width: 90px;
+            height: 64px;
+            border-radius: 12px;
+            border: 2px solid #eee;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+            transition: all 0.15s;
+            filter: grayscale(1) opacity(0.8);
+            vertical-align: middle;
+        }
+        .cc-selector input[type="radio"]:hover,
+        .cc-selector input[type="radio"]:focus {
+            filter: grayscale(0.3) opacity(1);
+            border-color: #eda712;
+            box-shadow: 0 2px 8px rgba(237,167,18,0.10);
+        }
+        .cc-selector input[type="radio"]:checked {
+            filter: none;
+            border-color: #eda712;
+            box-shadow: 0 2px 12px rgba(237,167,18,0.18);
+        }
+        #vacation { background-image: url(/img/eventType/vacation.png);}
+        #diet     { background-image: url(/img/eventType/diet.png);}
+        #shopping { background-image: url(/img/eventType/shopping.png);}
+        #place    { background-image: url(/img/eventType/place.png);}
+        #text     { background-image: url(/img/eventType/text.png);}
+        .cc-selector label {
+            display: block;
+            margin-top: 6px;
+            font-size: 14px;
+            color: #333;
         }
 
+        /* 페이징 스타일 */
+        #diet_pagingul, #px_pagingul {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0;
+            padding: 0;
+            margin: 20px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #eee;
+            background: #faf8f4;
+        }
         #diet_pagingul li, #px_pagingul li {
-            text-align: center;
-            float: left;
-            list-style:none;
-
+            list-style: none;
+            float: none;
         }
-
         #diet_pagingul li a, #px_pagingul li a {
             display: block;
-            font-size: 14px;
-            color: black;
-            padding: 9px 12px;
-            border-right: solid 1px #ccc;
-            box-sizing: border-box;
-            text-decoration-line:none;
+            padding: 10px 16px;
+            font-size: 15px;
+            color: #333;
+            text-decoration: none;
+            border-right: 1px solid #eee;
+            transition: background 0.15s, color 0.15s;
         }
-
+        #diet_pagingul li:last-child a, #px_pagingul li:last-child a {
+            border-right: none;
+        }
         #diet_pagingul li.on, #px_pagingul li.on {
             background: #eda712;
         }
-
         #diet_pagingul li.on a, #px_pagingul li.on a {
             color: #fff;
+            font-weight: bold;
         }
-
+        #diet_pagingul li a:hover, #px_pagingul li a:hover {
+            background: #ffe9b7;
+            color: #eda712;
+        }
     </style>
-    <link href='/css/planner_css.css>' rel='stylesheet' />
+    <link href='/css/planner_css.css' rel='stylesheet' />
 </head>
 <body>
 <!-- 로딩중 -->
@@ -89,7 +112,6 @@
     <p>로딩중...</p>
 </div>
 <nav th:replace="fragments/common :: menu(menu)" />
-
 
 <!-- 메뉴바(common) -->
 <div class="card" style="margin: 2vh auto;max-width: 1500px;background-color:#e9e9e9">
@@ -106,10 +128,10 @@
 </div>
 <div id="calendar"></div>
 
-
 <!-- 이벤트 유형 선택 modal -->
 <div class="modal fade" id="type_event_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <!-- modal-lg로 너비 확대 -->
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="type_event_title">일정 유형을 선택하세요.</h5>
@@ -117,7 +139,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form class = "modal-body">
+            <form class="modal-body">
                 <div class="cc-selector">
                     <div>
                         <input type="radio" class="type_event_input" id="vacation" value="vacation" name="type_event">
@@ -141,13 +163,15 @@
                     </div>
                 </div>
             </form>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="type_event_save">선택</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="type_event_modal_close">취소</button>
+            <!-- 버튼 가운데 정렬, 버튼 크기 통일 -->
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-primary" id="type_event_save" style="min-width: 120px;">선택</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="type_event_modal_close" style="min-width: 120px;">취소</button>
             </div>
         </div>
     </div>
 </div>
+
 
 
 <!-- 이벤트 추가 modal -->
@@ -798,53 +822,37 @@
                                         data: {},
                                         async: false,
                                         success: function(data){
-                                            jsonData = JSON.parse(data); //string -> json
+                                            jsonData = JSON.parse(data);
                                             resultCode = jsonData.header.resultCode;
                                             let bodyData = jsonData.body;
-                                            if(totalCount != 0) {
-                                                if(pageNo == totalPage) {
-                                                    for (let i = 0; i < totalCount % numOfRows; i++) {
-                                                        let table_html='';
-                                                        table_html += '<tr>';
-                                                        table_html += '  <td>'+bodyData.items[i]['DESC_KOR']+'</td>';
-                                                        table_html += '  <td>'+bodyData.items[i]['SERVING_WT']+'</td>';
-                                                        table_html += '  <td>'+bodyData.items[i]['NUTR_CONT1']+'</td>';
-                                                        table_html += '  <td>'+bodyData.items[i]['NUTR_CONT2']+'</td>';
-                                                        table_html += '  <td>'+bodyData.items[i]['NUTR_CONT3']+'</td>';
-                                                        table_html += '  <td>'+bodyData.items[i]['NUTR_CONT4']+'</td>';
-                                                        table_html += '  <td>'+bodyData.items[i]['NUTR_CONT5']+'</td>';
-                                                        table_html += '  <td>'+bodyData.items[i]['NUTR_CONT6']+'</td>';
-                                                        table_html += '  <td>'+bodyData.items[i]['NUTR_CONT7']+'</td>';
-                                                        table_html += '  <td>'+bodyData.items[i]['NUTR_CONT8']+'</td>';
-                                                        table_html += '  <td>'+bodyData.items[i]['NUTR_CONT9']+'</td>';
-                                                        table_html += '</tr>';
+                                            $('#diet_api_body').empty();
 
-                                                        $('#diet_api_body').append(table_html);
-                                                    }
-                                                } else {
-                                                    for (let i = 0; i < numOfRows; i++) {
-                                                        let table_html='';
-                                                        table_html += '<tr>';
-                                                        table_html += '  <td>'+bodyData.items[i]['DESC_KOR']+'</td>';
-                                                        table_html += '  <td>'+bodyData.items[i]['SERVING_WT']+'</td>';
-                                                        table_html += '  <td>'+bodyData.items[i]['NUTR_CONT1']+'</td>';
-                                                        table_html += '  <td>'+bodyData.items[i]['NUTR_CONT2']+'</td>';
-                                                        table_html += '  <td>'+bodyData.items[i]['NUTR_CONT3']+'</td>';
-                                                        table_html += '  <td>'+bodyData.items[i]['NUTR_CONT4']+'</td>';
-                                                        table_html += '  <td>'+bodyData.items[i]['NUTR_CONT5']+'</td>';
-                                                        table_html += '  <td>'+bodyData.items[i]['NUTR_CONT6']+'</td>';
-                                                        table_html += '  <td>'+bodyData.items[i]['NUTR_CONT7']+'</td>';
-                                                        table_html += '  <td>'+bodyData.items[i]['NUTR_CONT8']+'</td>';
-                                                        table_html += '  <td>'+bodyData.items[i]['NUTR_CONT9']+'</td>';
-                                                        table_html += '</tr>';
+                                            if(bodyData.items && bodyData.items.length > 0){
+                                                bodyData.items.forEach((item) => {
+                                                    // 단위 변환 (mg → g)
+                                                    const sodium = (parseFloat(item.AMT_NUM12) / 1000).toFixed(2);
+                                                    const cholesterol = (parseFloat(item.AMT_NUM31) / 1000).toFixed(2);
 
-                                                        $('#diet_api_body').append(table_html);
-                                                    }
-                                                }
+                                                    const table_html = `
+                        <tr>
+                            <td>${item.FOOD_NM_KR}</td>          <!-- 음식명 -->
+                            <td>${item.SERVING_SIZE}</td>        <!-- 1회 제공량 -->
+                            <td>${item.AMT_NUM1}</td>            <!-- 열량(kcal) -->
+                            <td>${item.AMT_NUM6}</td>            <!-- 탄수화물(g) -->
+                            <td>${item.AMT_NUM3}</td>            <!-- 단백질(g) -->
+                            <td>${item.AMT_NUM4}</td>            <!-- 지방(g) -->
+                            <td>${item.AMT_NUM7}</td>            <!-- 당류(g) -->
+                            <td>${sodium}</td>                   <!-- 나트륨(g) -->
+                            <td>${cholesterol}</td>             <!-- 콜레스테롤(g) -->
+                            <td>${item.AMT_NUM8}</td>            <!-- 포화지방산(g) -->
+                            <td>${item.AMT_NUM30}</td>           <!-- 트랜스지방산(g) -->
+                        </tr>
+                    `;
+                                                    $('#diet_api_body').append(table_html);
+                                                });
                                             } else {
-                                                $('#add_diet_by_api_modal_body').append('<p>검색 결과가 없습니다.</p>');
+                                                $('#diet_api_body').html('<tr><td colspan="11">검색 결과가 없습니다.</td></tr>');
                                             }
-
                                             status = "ok";
                                         }
                                     })
@@ -959,6 +967,12 @@
                                     $("#add_diet_by_api_modal").modal("hide");
                                 });
                             })
+
+
+
+
+
+                            // !!!!!!!!!!!
                         } else if(eventType == "shopping") {
                             $('#shopping_input').css('display','block');
                             $('#shopping_title').attr('disabled', false);

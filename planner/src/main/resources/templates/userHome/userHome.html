@@ -3,80 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <title>Smart Planner</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
-            font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-            background-color: #f4f6f8;
+            font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+            background: #f6f8fb;
             margin: 0;
             padding: 0;
         }
-
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 30px;
-            background-color: #2c3e50;
-            color: white;
+            padding: 18px 32px;
+            background: #232946;
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(35,41,70,0.07);
         }
-
-        .navbar h2 {
-            margin: 0;
-            font-size: 1.3em;
-        }
-
+        .navbar h2 { margin: 0; font-size: 1.5em; letter-spacing: 1px; }
         .nav-links a {
-            color: white;
+            color: #fff;
             text-decoration: none;
-            font-weight: bold;
-            margin-left: 20px;
+            font-weight: 500;
+            margin-left: 28px;
+            transition: color 0.2s;
         }
-
-        .nav-links a:hover {
-            text-decoration: underline;
-        }
+        .nav-links a:hover { color: #eebd35; }
 
         h1 {
             text-align: center;
-            margin: 30px 0 20px;
-            font-size: 2em;
-            color: #333;
+            margin: 36px 0 24px;
+            font-size: 2.1em;
+            color: #232946;
+            letter-spacing: 1px;
         }
-
         .container {
-            max-width: 800px;
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 16px 32px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 32px;
         }
-
         .card {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(35,41,70,0.07);
+            padding: 28px 32px 24px 32px;
+            flex: 1 1 320px;
+            min-width: 320px;
+            max-width: 520px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 0;
         }
-
-        .card h3 {
-            margin-top: 0;
+        .card:not(:last-child) { margin-bottom: 0; }
+        .card-header {
+            font-size: 1.2em;
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: #232946;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-
-        #weather p {
-            font-size: 1.1em;
-            color: #555;
+        .card-header .icon {
+            font-size: 1.25em;
+            opacity: 0.7;
         }
-
-        canvas {
-            margin-top: 20px;
+        .card-content {
+            font-size: 1.05em;
+            color: #444;
+        }
+        .diet-score-card {
+            transition: background 0.2s;
+        }
+        .diet-score-card.bg-success { background: linear-gradient(135deg,#d2f8e5 0%,#b6f0c0 100%); }
+        .diet-score-card.bg-warning { background: linear-gradient(135deg,#fff4d2 0%,#ffe3a3 100%); }
+        .diet-score-card.bg-danger  { background: linear-gradient(135deg,#ffe0e0 0%,#ffbaba 100%); }
+        .diet-score-card.bg-primary { background: linear-gradient(135deg,#e0e8ff 0%,#b6c6f0 100%); }
+        .diet-score-card .card-header { color: #222; }
+        .diet-score-card .card-footer a { color: #222; font-weight: 500; }
+        .diet-score-card .card-footer a:hover { color: #232946; text-decoration: underline; }
+        .card-footer {
+            margin-top: 18px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            font-size: 0.98em;
+        }
+        .card-footer a {
+            text-decoration: none;
+            padding: 6px 18px;
+            border-radius: 6px;
+            background: #ffffff;
+            color: #fff;
+            transition: background 0.2s;
+        }
+        .card-footer a:hover { background: #eebd35; color: #232946; }
+        /* Chart area */
+        canvas { margin-top: 18px; }
+        /* Modal */
+        #info_dietCard_modal {
+            display: none; position: fixed; left: 0; top: 0; width: 100vw; height: 100vh;
+            background: rgba(35,41,70,0.15); z-index: 9999;
+            align-items: center; justify-content: center;
+        }
+        #info_dietCard_modal .modal-content {
+            background: #fff;
+            border-radius: 16px;
+            padding: 36px 32px 28px 32px;
+            max-width: 420px;
+            width: 95vw;
+            margin: 0 auto;
+            position: relative;
+            box-shadow: 0 4px 32px rgba(35,41,70,0.16);
+            animation: modalPop 0.2s;
+        }
+        @keyframes modalPop { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        #info_dietCard_modal button {
+            position: absolute; right: 18px; top: 18px; border: none; background: none; font-size: 1.5em; color: #888; cursor: pointer;
+        }
+        #dietResult p { margin: 8px 0 0 0; font-size: 1.05em; }
+        #dietStandard { margin-top: 18px; }
+        #dietStandard h4 { margin: 0 0 6px 0; font-size: 1.08em; color: #232946; }
+        #dietStandard ul { padding-left: 18px; margin: 0; font-size: 0.98em; color: #555; }
+        /* Responsive */
+        @media (max-width: 900px) {
+            .container { flex-direction: column; gap: 22px; }
+            .card { min-width: 0; max-width: 100%; }
         }
     </style>
 </head>
 <body>
-
 <div class="navbar">
-    <h2>날씨 대시보드</h2>
+    <h2>Smart Planner</h2>
     <div class="nav-links">
         <a href="/user/home">유저 홈</a>
         <a href="/myPlanner">나의 플래너</a>
@@ -88,18 +153,41 @@
 
 <div class="container">
     <div class="card" id="weather">
-        <h3>전국 중기예보</h3>
-        <p>로딩 중입니다...</p>
+        <div class="card-header"><span class="icon">🌤️</span>전국 중기예보</div>
+        <div class="card-content"><p>로딩 중입니다...</p></div>
     </div>
 
-    <div class="card">
-        <h3>최근 일주일 소비 차트</h3>
-        <canvas id="weekChart"></canvas>
-    </div>
+    <div class="card diet-score-card" id="dietCard"></div>
 
     <div class="card">
-        <h3>최근 세 달 소비 차트</h3>
-        <canvas id="monthChart"></canvas>
+        <div class="card-header"><span class="icon">📈</span>최근 일주일 소비 차트</div>
+        <div class="card-content"><canvas id="weekChart"></canvas></div>
+    </div>
+    <div class="card">
+        <div class="card-header"><span class="icon">📊</span>최근 세 달 소비 차트</div>
+        <div class="card-content"><canvas id="monthChart"></canvas></div>
+    </div>
+</div>
+
+<!-- 식단 상세 모달 -->
+<div id="info_dietCard_modal">
+    <div class="modal-content">
+        <button onclick="$('#info_dietCard_modal').hide();">&times;</button>
+        <h3 style="margin-top:0;">식단 상세 정보</h3>
+        <div id="dietResult"></div>
+        <div id="dietStandard">
+            <h4>기준</h4>
+            <ul>
+                <li>열량 권장 2000, 최대 3000 (세계보건기구)</li>
+                <li>탄수화물 최소 100g, 권장 130g, 최대 200g (식약처)</li>
+                <li>단백질 50g~55g (식약처)</li>
+                <li>지방 권장 51g (식약처)</li>
+                <li>당류 권장 50g (세계보건기구)</li>
+                <li>나트륨 권장 2000mg (세계보건기구)</li>
+                <li>콜레스테롤 권장 300mg (미국심장협회)</li>
+                <li>트랜스지방산 권장 15g (식약처)</li>
+            </ul>
+        </div>
     </div>
 </div>
 
@@ -135,10 +223,10 @@
             items.forEach(item => {
                 html += `<p>${item.wfSv}</p>`;
             });
-            $("#weather").html(`<h3>전국 중기예보</h3>` + html);
+            $("#weather .card-content").html(html);
         },
         error: function () {
-            $("#weather").html("<p>날씨 정보를 불러오는 데 실패했습니다.</p>");
+            $("#weather .card-content").html("<p>날씨 정보를 불러오는 데 실패했습니다.</p>");
         }
     });
 
@@ -146,6 +234,96 @@
         return date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
     }
 
+    // ---------------- 전날 식단 분석 기능 ----------------
+    async function loadDietCard() {
+        const yesterday = new Date();
+        yesterday.setDate(today.getDate() - 1);
+        const yesterdayDate = getYmd(yesterday);
+
+        let food_name = "";
+        let totalKcal = 0;
+        let totalCarbohydrate = 0;
+        let totalProtein = 0;
+        let totalFat = 0;
+        let totalSugar = 0;
+        let totalSalt = 0;
+        let totalCholesterol = 0;
+        let totalSaturatedFattyAcids = 0;
+
+        try {
+            const res = await fetch(`/user/getYesterdayDiet/${yesterdayDate}`);
+            const data = await res.json();
+            for (let i = 0; i < data.length; i++) {
+                food_name += (i > 0 ? ", " : "") + data[i].food_name;
+                totalKcal += Number(data[i].kcal);
+                totalCarbohydrate += Number(data[i].carbohydrate);
+                totalProtein += Number(data[i].protein);
+                totalFat += Number(data[i].fat);
+                totalSugar += Number(data[i].sugar);
+                totalSalt += Number(data[i].salt);
+                totalCholesterol += Number(data[i].cholesterol);
+                totalSaturatedFattyAcids += Number(data[i].saturatedFattyAcids);
+            }
+        } catch (e) {
+            $("#dietCard").html('<div class="card-content" style="color:#dc3545;">식단 데이터를 불러오지 못했습니다.</div>');
+            return;
+        }
+
+        let dietScore = 0;
+        if (totalKcal >= 1000 && totalKcal <= 3000) dietScore += 1;
+        if (totalCarbohydrate >= 100 && totalCarbohydrate <= 200) dietScore += 1;
+        if (totalProtein >= 50) dietScore += 1;
+        if (totalFat >= 51 && totalFat <= 66.7) dietScore += 1;
+        if (totalSugar <= 50) dietScore += 1;
+        if (totalSalt <= 2000) dietScore += 1;
+        if (totalCholesterol <= 300) dietScore += 1;
+        if (totalSaturatedFattyAcids <= 15) dietScore += 1;
+
+        let cardClass = "bg-primary", msg = "", detailBtn = "";
+        if (food_name === "") {
+            cardClass = "bg-primary";
+            msg = "전날 식단 데이터가 없어요.";
+            detailBtn = `<a href="/myPlanner">식단 추가하러 가기</a>`;
+        } else if (dietScore === 8) {
+            cardClass = "bg-success";
+            msg = "균형 잡힌 식단을 실천중이에요!";
+            detailBtn = `<a href="javascript:showDietCardInfo();">상세 보기</a>`;
+        } else if (dietScore < 8 && dietScore >= 4) {
+            cardClass = "bg-warning";
+            msg = "전날 식단을 조금 신경 쓸 필요가 있어보여요.";
+            detailBtn = `<a href="javascript:showDietCardInfo();">상세 보기</a>`;
+        } else {
+            cardClass = "bg-danger";
+            msg = "식단의 개선이 필요합니다!!";
+            detailBtn = `<a href="javascript:showDietCardInfo();">상세 보기</a>`;
+        }
+
+        $("#dietCard").attr("class", `card diet-score-card ${cardClass}`);
+        $("#dietCard").html(
+            `<div class="card-header"><span class="icon">🥗</span>전날 식단 분석</div>
+            <div class="card-content">${msg}</div>
+            <div class="card-footer">${detailBtn}</div>`
+        );
+
+        // 상세 정보 준비
+        let dietDetailHtml = '';
+        dietDetailHtml += `<p>섭취 음식 : ${food_name || '-'}</p>`;
+        dietDetailHtml += `<p>총 칼로리 (kcal) : ${totalKcal}</p>`;
+        dietDetailHtml += `<p>총 탄수화물 (g) : ${totalCarbohydrate}</p>`;
+        dietDetailHtml += `<p>총 단백질 (g) : ${totalProtein}</p>`;
+        dietDetailHtml += `<p>총 지방 (g) : ${totalFat}</p>`;
+        dietDetailHtml += `<p>총 당 (g) : ${totalSugar}</p>`;
+        dietDetailHtml += `<p>총 나트륨 (mg) : ${totalSalt}</p>`;
+        dietDetailHtml += `<p>총 콜레스테롤 (mg) : ${totalCholesterol}</p>`;
+        dietDetailHtml += `<p>총 트랜스지방산 (g) : ${totalSaturatedFattyAcids}</p>`;
+        $("#dietResult").html(dietDetailHtml);
+    }
+
+    function showDietCardInfo() {
+        $("#info_dietCard_modal").css("display", "flex");
+    }
+
+    // 차트 함수 유지
     async function getShoppingDataByDate(dateStr) {
         const res = await fetch(`/user/getShoppingByDate/${dateStr}`);
         const data = await res.json();
@@ -153,8 +331,7 @@
     }
 
     async function loadWeekChart() {
-        const dates = [];
-        const values = [];
+        const dates = [], values = [];
         for (let i = 6; i >= 0; i--) {
             const d = new Date();
             d.setDate(today.getDate() - i);
@@ -170,17 +347,20 @@
                 datasets: [{
                     label: '일별 소비 금액',
                     data: values,
-                    fill: false,
-                    borderColor: 'rgb(75, 192, 192)',
-                    tension: 0.1
+                    fill: true,
+                    backgroundColor: 'rgba(35,41,70,0.09)',
+                    borderColor: '#232946',
+                    tension: 0.22,
+                    pointBackgroundColor: '#eebd35',
+                    pointRadius: 5
                 }]
-            }
+            },
+            options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
         });
     }
 
     async function loadMonthChart() {
-        const months = [];
-        const values = [];
+        const months = [], values = [];
         for (let i = 2; i >= 0; i--) {
             const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
             const yyyymm = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2);
@@ -196,15 +376,24 @@
                 datasets: [{
                     label: '월별 소비 금액',
                     data: values,
-                    backgroundColor: 'rgba(54, 162, 235, 0.6)'
+                    backgroundColor: ['#eebd35','#b6c6f0','#d2f8e5']
                 }]
-            }
+            },
+            options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
         });
     }
 
+    // 최초 실행
+    loadDietCard();
     loadWeekChart();
     loadMonthChart();
-</script>
 
+    // 모달 바깥 클릭 시 닫기
+    $(document).on('mousedown', function(e) {
+        if ($(e.target).is('#info_dietCard_modal')) {
+            $('#info_dietCard_modal').hide();
+        }
+    });
+</script>
 </body>
 </html>
