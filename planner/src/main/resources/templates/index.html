@@ -3,27 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>메인 페이지</title>
+    <title>Smart Planner</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <style>
         body {
-            background-color: #f8f9fa;
+            background: #f6f7fb;
+            color: #23243a;
+            min-height: 100vh;
         }
-        .container {
-            max-width: 600px;
-            margin-top: 100px;
+        .navbar {
+            background: #23243a !important;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #fff !important;
+        }
+        .nav-link {
+            color: #f6f7fb !important;
+            margin-left: 10px;
+            transition: color 0.2s;
+        }
+        .nav-link:hover {
+            color: #ffd43a !important;
+        }
+        .main-card {
+            background: #fff;
+            border-radius: 1.25rem;
+            box-shadow: 0 8px 32px 0 rgba(44, 62, 80, 0.08);
+            padding: 2.5rem 2rem;
+            margin-top: 80px;
+            margin-bottom: 40px;
+            transition: box-shadow 0.3s;
+        }
+        .main-card:hover {
+            box-shadow: 0 16px 40px 0 rgba(44, 62, 80, 0.16);
         }
         .btn-custom {
             width: 100%;
-            margin-top: 10px;
+            margin-top: 12px;
+            font-size: 1.1rem;
+            padding: 0.75rem 0;
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 8px rgba(108, 99, 255, 0.07);
+        }
+        .btn-primary {
+            background: #6c63ff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background: #554ee2;
+        }
+        .btn-outline-dark {
+            border: 2px solid #6c63ff;
+            color: #6c63ff;
+            background: #e6edfb;
+        }
+        .btn-outline-dark:hover {
+            background: #6c63ff;
+            color: #fff;
+        }
+        .main-icon {
+            width: 80px;
+            margin-bottom: 18px;
+            opacity: 0.85;
+            filter: drop-shadow(0 2px 8px rgba(108, 99, 255, 0.08));
+        }
+        .main-title {
+            font-weight: 700;
+        }
+        .main-desc {
+            font-size: 1.1rem;
+            color: #6b7280;
+            margin-bottom: 1.7rem;
+        }
+        footer {
+            background: #e6edfb;
+            color: #6b7280;
+            font-size: 1rem;
+            border-top: 1px solid #dde3f5;
         }
     </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg">
     <div class="container">
-        <a class="navbar-brand" href="#">스마트 플래너 서비스</a>
+        <a class="navbar-brand" href="#">Smart Planner</a>
         <div class="navbar-nav ms-auto">
             <a class="nav-link" th:href="@{/login}">로그인</a>
             <a class="nav-link" th:href="@{/registry}">회원가입</a>
@@ -31,16 +97,18 @@
     </div>
 </nav>
 
-<div class="container text-center">
-    <h2 class="mb-4">플래너 서비스에 오신 것을 환영합니다!</h2>
-    <p class="text-muted">손쉽게 일정을 관리하고 다양한 기능을 활용해 보세요.</p>
-
-    <a class="btn btn-primary btn-custom" th:href="@{/login}">로그인</a>
-    <a class="btn btn-outline-dark btn-custom" th:href="@{/registry}">회원가입</a>
+<div class="container d-flex justify-content-center align-items-center">
+    <div class="main-card w-100 text-center">
+        <img src="img/logo/logo.png" alt="Smart Planner" class="main-icon">
+        <h2 class="main-title mb-3">2025 Smart Planner</h2>
+        <p class="main-desc">손쉽게 일정을 관리하고 다양한 기능을 활용해 보세요.</p>
+        <a class="btn btn-primary btn-custom" th:href="@{/login}">로그인</a>
+        <a class="btn btn-outline-dark btn-custom" th:href="@{/registry}">회원가입</a>
+    </div>
 </div>
 
-<footer class="text-center mt-5 py-3 bg-light">
-    <p class="mb-0">&copy; 2025 플래너 서비스. 모든 권리 보유.</p>
+<footer class="text-center py-3 mt-auto">
+    <p class="mb-0">&copy; 2025 Smart Planner. All rights reserved.</p>
 </footer>
 
 </body>

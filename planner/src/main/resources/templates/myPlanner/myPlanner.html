@@ -232,7 +232,6 @@
                         <input type="text" id="shopping_title" class="form-control" name="calendar_content" placeholder=" 예)저녁 식사" value="" disabled="true">
                         <p></p>
                         <div class= "buttons" id="shopping_buttons">
-                            <input type="button" id="add_shopping_by_px_api" class="btnAdd btn btn-dark" value="물품 검색 추가">
                             <input type="button" id="add_shopping_by_text" class="btn btn-outline-secondary" value="텍스트로 추가">
                         </div>
                         <input type="text" id="shopping_name" class="form-control" name="calendar_content" placeholder="상품명" value="" disabled="true">
@@ -330,7 +329,7 @@
                         <label for="place_name_info" class="col-form-label">장소 이름</label>
                         <input type="text" id="place_name_info" class="form-control" name="place_name_info">
 
-                        <label for="place_address_info" class="col-form-label">장소 주소</label>
+                        <label for="place_address_info" class="col-form-label">장소 위치</label>
                         <input type="text" id="place_address_info" class="form-control" name="place_address_info">
 
                         <!-- 이미지 지도를 표시할 div 입니다 -->
@@ -479,7 +478,7 @@
 <footer th:replace="fragments/common :: footer"></footer>
 </body>
 <!-- common -->
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=94f089af2e237dde5de7a2d832594a3c&libraries=services"></script> <!-- 카카오 MAP API -->
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=744793d3d34e5da31c236f92cbcd8751&libraries=services"></script> <!-- 카카오 MAP API -->
 <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
 <script>
     window.onload = function () {
