@@ -323,14 +323,16 @@
                     </fieldset>
                 </div>
                 <div id="place_info">
-                    <fieldset id="info_event_place" disabled="true">
+                    <fieldset id="info_event_place" disabled>
                         <label for="place_title_info" class="col-form-label">장소 제목</label>
-                        <input type="text" id="place_title_info" class="form-control" name="info_event_place">
-                        <label for="info_event_place_info" class="col-form-label">장소 내용</label>
-                        <fieldset id="info_event_place_info">
-                            <input type="text" id="place_name_info" class="form-control" name="info_event_place">
-                            <input type="text" id="place_address_info" class="form-control" name="info_event_place">
-                        </fieldset>
+                        <input type="text" id="place_title_info" class="form-control" name="place_title_info">
+
+                        <label for="place_name_info" class="col-form-label">장소 이름</label>
+                        <input type="text" id="place_name_info" class="form-control" name="place_name_info">
+
+                        <label for="place_address_info" class="col-form-label">장소 주소</label>
+                        <input type="text" id="place_address_info" class="form-control" name="place_address_info">
+
                         <!-- 이미지 지도를 표시할 div 입니다 -->
                         <div id="map"></div>
                         <p>지도 클릭 시 지도 검색으로 이동합니다.</p>
@@ -1180,8 +1182,8 @@
                                     for (var item of data) {
                                         let table_html='';
                                         table_html += '<tr>';
-                                        table_html += '  <td>'+item['title']+'</td>';
-                                        table_html += '  <td>'+item['roadAddressName']+'</td>';
+                                        table_html += '  <td>'+item['placeName']+'</td>';    // 수정!
+                                        table_html += '  <td>'+item['roadAddress']+'</td>';   // 수정!
                                         table_html += '</tr>';
 
                                         $('#likedPlace_body').append(table_html);
@@ -1250,14 +1252,14 @@
                                         "eventType" : eventType,
                                         "title" : title,
                                         "placeName" : placeName,
-                                        "address" : address,
+                                        "roadAddress" : address,   // 수정!
                                         "x" : x,
                                         "y" : y,
                                         "start" : start,
                                         "startDate" : start_date,
                                         "end" : end,
                                         "allDay" : allDay
-                                    }//전송할 객체 생성
+                                    };//전송할 객체 생성
                                     var eventPlace = JSON.stringify(obj)
                                     $.ajax({
                                         url: "/myPlanner/create_place",
@@ -1272,8 +1274,8 @@
                                         success : function(){
                                             alert("등록을 완료하였습니다!");
                                         },
-                                        fail : function (request, status, error){
-                                            alert("에러 발생" + error)
+                                        error : function (request, status, error){
+                                            alert("에러 발생: " + error)
                                         },
                                         complete : function(){
                                             location.replace("");
@@ -1299,8 +1301,8 @@
                                         success : function(){
                                             alert("삭제를 완료하였습니다!");
                                         },
-                                        fail : function (request, status, error){
-                                            alert("에러 발생" + error)
+                                        error : function (request, status, error){
+                                            alert("에러 발생: " + error)
                                         },
                                         complete : function(){
                                             location.replace("");
@@ -1308,7 +1310,8 @@
                                     })
                                 }
                             });
-                        } else if(eventType == "text") {
+                        }
+                        else if(eventType == "text") {
                             $('#text_input').css('display','block');
                             $('#add_event_text').attr('disabled', false);
 
@@ -1423,6 +1426,7 @@
                     map_x = arg.event.extendedProps.x;
                     map_y = arg.event.extendedProps.y;
                     $('#place_info').css('display','block');
+                    console.log('extendedProps:', arg.event.extendedProps);
                     document.getElementById("place_title_info").value = arg.event.title;
                     document.getElementById("place_name_info").value = arg.event.extendedProps.placeName;
                     document.getElementById("place_address_info").value = arg.event.extendedProps.address;

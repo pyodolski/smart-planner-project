@@ -89,6 +89,15 @@ public class MyPlannerController {
         User user = userRepository.findByEmail(username);
         return likedPlaceService.findLikedPlaceXY(user, placeName, roadAddress);
     }
+    @GetMapping("/getLikedPlaceXY/{placeName}/{roadAddress}")
+    @ResponseBody
+    public LikedPlaceXYDto getLikedPlaceXY(@PathVariable String placeName, @PathVariable String roadAddress, Principal principal) throws IOException {
+        String username = principal.getName();
+        User user = userRepository.findByEmail(username);
+
+        return likedPlaceService.findLikedPlaceXY(user, placeName, roadAddress);
+
+    }
 
 
     @DeleteMapping("/deleteLikedPlace/{placeName}/{roadAddress}") // 주소 변경
