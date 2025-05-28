@@ -55,6 +55,12 @@ password: 1234<br>
 
 http://localhost:8080
 
+[사용 공공 API 목록]<br>
+1. 기상청-날씨중기예보 : https://www.data.go.kr/iim/api/selectAPIAcountView.do<br>
+2. 카카오 Map : https://apis.map.kakao.com/<br>
+3. 식품의약품안전처_식품영양성분 : https://www.data.go.kr/iim/api/selectAPIAcountView.do<br>
+4. 구글 캘린더 API (공휴일) : https://console.cloud.google.com/apis/library/calendar-json.googleapis.com?hl=ko&pli=1&inv=1&invt=AbynaQ
+
 [개발 기간] 
   25.03.18 ~ 25.05.20 (약 2개월)
 
