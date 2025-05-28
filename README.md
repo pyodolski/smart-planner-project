@@ -34,8 +34,8 @@ Collation: utf8mb4_general_ci → Apply<br>
 use planner;<br>
 💻 [프로젝트 IntelliJ에서 열기]
 
-1️⃣ IntelliJ 실행 → 압축 해제한 smart-planner-project-main 폴더 열기<br>
-2️⃣ Gradle 프로젝트로 선택 (또는 다운로드 후 Gradle 로드 대기)<br>
+1️⃣ IntelliJ 실행 → 압축 해제한 smart-planner-project-main/planner 폴더 열기<br>
+2️⃣ Gradle 프로젝트로 선택 (다운로드 혹은 선택 후 Gradle 로드 대기)<br>
 
 📝 [application.yml 수정]
 
@@ -69,4 +69,10 @@ http://localhost:8080
 
   25.04.01 : 식단 API 호출 기능 추가 
 
-  25.05.02 : 분석 단계
+  25.04.10 : 캘린더 및 공휴일 API 호출 기능 추가
+
+  20.04.25
+
+  25.05.02 : 분석 문서 작성
+
+  25.05.21 : 설계 문서 작성
