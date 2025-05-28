@@ -2,7 +2,7 @@
 
 📦 [파일 다운로드]
 
-1️⃣ https://github.com/pyodolski/smart-planner-project 접속
+1️⃣ https://github.com/pyodolski/smart-planner-project 접속<br>
 2️⃣ 우측 상단 Code 버튼 클릭 → Download ZIP → 압축 해제
 
 ☕ [JDK 설치]
